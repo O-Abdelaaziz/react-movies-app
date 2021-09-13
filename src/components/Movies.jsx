@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getMovies } from '../services/fakeMovieService';
+import { Like } from './common/Like';
 
 const Movies = () => {
   const [movies, setMovies] = useState(getMovies());
@@ -11,6 +12,13 @@ const Movies = () => {
     });
   };
 
+  const likeMovieHandler = (movie) => {
+    const updateMovies = [...movies];
+    const index = updateMovies.indexOf(movie);
+    updateMovies[index] = { ...updateMovies[index] };
+    updateMovies[index].liked = !updateMovies[index].liked;
+    setMovies(updateMovies);
+  };
   return (
     <React.Fragment>
       <div className="alert alert-primary mt-2" role="alert">
@@ -25,6 +33,7 @@ const Movies = () => {
               <th scope="col">Genre</th>
               <th scope="col">Stock</th>
               <th scope="col">Rate</th>
+              <th scope="col">Like</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -35,6 +44,12 @@ const Movies = () => {
                 <td>{movie.genre.name}</td>
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
+                <td>
+                  <Like
+                    liked={movie.liked}
+                    onLike={() => likeMovieHandler(movie)}
+                  />
+                </td>
                 <td>
                   <button
                     className="btn btn-danger btn-sm"
